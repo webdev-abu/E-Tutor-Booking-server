@@ -47,7 +47,7 @@ async function run() {
       res.send(result);
     });
 
-    // Delete job from jobs collection
+    // Delete tutor from tutors collection
     app.delete("/job/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -55,7 +55,7 @@ async function run() {
       res.send(result);
     });
 
-    //  get a single job from the jobs collection
+    //  get a single tutor from tutors collection
     app.get("/job/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
