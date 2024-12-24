@@ -55,19 +55,19 @@ async function run() {
       res.send(result);
     });
 
+    //  get a single tutor from tutors collection
+    app.get("/tutor-detail/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await tutorsCollection.findOne(query);
+      res.send(result);
+    });
+
     // Delete tutor from tutors collection
     app.delete("/job/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await jobsCollection.deleteOne(query);
-      res.send(result);
-    });
-
-    //  get a single tutor from tutors collection
-    app.get("/job/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id) };
-      const result = await jobsCollection.findOne(query);
       res.send(result);
     });
 
