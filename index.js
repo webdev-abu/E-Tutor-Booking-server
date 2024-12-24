@@ -39,11 +39,19 @@ async function run() {
       res.send(result);
     });
 
-    // get all jobs posted by a specific user from db
-    app.get("/jobs/:email", async (req, res) => {
-      const email = req.params.email;
-      const query = { "buyer.email": email };
-      const result = await jobsCollection.find(query).toArray();
+    app.get("/tutors/category", async (req, res) => {
+      // const category = req.query.category;
+      const query = tutorsCollection.find().limit(9);
+      const result = await query.toArray();
+      res.send(result);
+    });
+
+    // get all tutors posted by a specific category tutors from db
+    app.get("/find-tutors/:category", async (req, res) => {
+      const category = req.params.category;
+
+      const query = { category: category };
+      const result = await tutorsCollection.find(query).toArray();
       res.send(result);
     });
 
