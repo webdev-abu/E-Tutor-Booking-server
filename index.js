@@ -24,6 +24,7 @@ async function run() {
   try {
     const bd = client.db("E-TutorDB");
     const tutorsCollection = bd.collection("tutors");
+    const bookCollection = bd.collection("booked-tutor");
 
     // Save a tutorsData in DB
     app.post("/add-tutors", async (req, res) => {
@@ -60,6 +61,13 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await tutorsCollection.findOne(query);
+      res.send(result);
+    });
+
+    // Book Tutorial with New Book Collection
+    app.post("/booked-tutorial", async (req, res) => {
+      const bookData = req.body;
+      const result = await bookCollection.insertOne(bookData);
       res.send(result);
     });
 
