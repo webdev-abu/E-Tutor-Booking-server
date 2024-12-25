@@ -23,7 +23,8 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const bd = client.db("E-TutorDB");
-    const tutorsCollection = bd.collection("tutors");
+    // const tutorsCollection = bd.collection("tutors");
+    const tutorsCollection = bd.collection("tutorials");
     const bookCollection = bd.collection("booked-tutor");
 
     // Save a tutorsData in DB
@@ -102,15 +103,6 @@ async function run() {
       );
       res.send(result);
     });
-    // get all tutors posted by a specific category tutors from db
-    // app.get("/booked-tutorial/:id", async (req, res) => {
-    //   const id = req.params.id;
-    //   console.log(id);
-    //   const query = { _id: new ObjectId(id) };
-    //   const result = await tutorsCollection.findOne(query);
-    //   // const result = await tutorsCollection.find(query).toArray();
-    //   res.send(result);
-    // });
 
     // Delete tutor from tutors collection
     app.delete("/delete-tutorial/:id", async (req, res) => {
@@ -135,6 +127,19 @@ async function run() {
         options
       );
       res.send(result);
+    });
+
+    app.get("/find-tutors", async (req, res) => {
+      try {
+        const { languages } = req.query; // Capture search query
+        const query = languages
+          ? { languages: { $regex: languages, $options: "i" } } // Case-insensitive match
+          : {};
+        const tutors = await tutorsCollection.find(query).toArray();
+        res.status(200).json(tutors);
+      } catch (error) {
+        res.status(500).json({ message: "Error fetching tutors" });
+      }
     });
 
     // Send a ping to confirm a successful connection
