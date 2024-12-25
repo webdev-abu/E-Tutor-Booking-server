@@ -131,12 +131,12 @@ async function run() {
 
     app.get("/find-tutors", async (req, res) => {
       try {
-        const { languages } = req.query; // Capture search query
+        const { languages } = req.query;
         const query = languages
-          ? { languages: { $regex: languages, $options: "i" } } // Case-insensitive match
+          ? { languages: { $regex: languages, $options: "i" } }
           : {};
         const tutors = await tutorsCollection.find(query).toArray();
-        res.status(200).json(tutors);
+        res.send(tutors);
       } catch (error) {
         res.status(500).json({ message: "Error fetching tutors" });
       }
