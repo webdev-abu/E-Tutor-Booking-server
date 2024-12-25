@@ -120,16 +120,20 @@ async function run() {
       res.send(result);
     });
 
-    // updated jobs collection
-    app.put("/update-job/:id", async (req, res) => {
-      const jobData = req.body;
+    // updated tutors collection
+    app.put("/update-tutorials/:id", async (req, res) => {
+      const tutorsData = req.body;
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
-      const updateJob = {
-        $set: jobData,
+      const updateTutors = {
+        $set: tutorsData,
       };
       const options = { upsert: true };
-      const result = await jobsCollection.updateOne(query, updateJob, options);
+      const result = await tutorsCollection.updateOne(
+        query,
+        updateTutors,
+        options
+      );
       res.send(result);
     });
 
