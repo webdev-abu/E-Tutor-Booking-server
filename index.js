@@ -27,7 +27,7 @@ async function run() {
     const bookCollection = bd.collection("booked-tutor");
 
     // Save a tutorsData in DB
-    app.post("/add-tutors", async (req, res) => {
+    app.post("/add-tutorial", async (req, res) => {
       const tutorData = req.body;
       console.log(tutorData);
       const result = await tutorsCollection.insertOne(tutorData);
@@ -61,6 +61,7 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await tutorsCollection.findOne(query);
+
       res.send(result);
     });
 
@@ -70,6 +71,39 @@ async function run() {
       const result = await bookCollection.insertOne(bookData);
       res.send(result);
     });
+
+    // get all booked posted by a specific user from db
+    app.get("/booked-tutorial/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { user_email: email };
+      const result = await bookCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    app.patch("/update-review/:tutorId", async (req, res) => {
+      const tutorId = req.params.tutorId;
+      console.log(tutorId);
+      const query = { _id: new ObjectId(tutorId) };
+      const options = { upsert: false };
+      const updateDoc = {
+        $inc: { reviews: 1 },
+      };
+      const result = await tutorsCollection.updateOne(
+        query,
+        updateDoc,
+        options
+      );
+      res.send(result);
+    });
+    // get all tutors posted by a specific category tutors from db
+    // app.get("/booked-tutorial/:id", async (req, res) => {
+    //   const id = req.params.id;
+    //   console.log(id);
+    //   const query = { _id: new ObjectId(id) };
+    //   const result = await tutorsCollection.findOne(query);
+    //   // const result = await tutorsCollection.find(query).toArray();
+    //   res.send(result);
+    // });
 
     // Delete tutor from tutors collection
     app.delete("/job/:id", async (req, res) => {
