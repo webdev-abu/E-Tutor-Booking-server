@@ -34,6 +34,13 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/my-tutorials/:userEmail", async (req, res) => {
+      const userEmail = req.params.userEmail;
+      const query = { email: userEmail };
+      const result = await tutorsCollection.find(query).toArray();
+      res.send(result);
+    });
+
     // get all tutors from db
     app.get("/tutors", async (req, res) => {
       const result = await tutorsCollection.find().toArray();
@@ -106,10 +113,10 @@ async function run() {
     // });
 
     // Delete tutor from tutors collection
-    app.delete("/job/:id", async (req, res) => {
+    app.delete("/delete-tutorial/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
-      const result = await jobsCollection.deleteOne(query);
+      const result = await tutorsCollection.deleteOne(query);
       res.send(result);
     });
 
