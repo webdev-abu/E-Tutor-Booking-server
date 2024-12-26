@@ -2,7 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const { MongoClient, ServerApiVersion, Db, ObjectId } = require("mongodb");
 const cookieParser = require("cookie-parser");
-const jwt = require("jsonwebtoken");
+const { jwt } = require("jsonwebtoken");
+// const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const port = process.env.PORT || 5000;
@@ -25,7 +26,8 @@ app.use(cookieParser());
 // User verification middleware
 const verifyToken = (req, res, next) => {
   const token = req.cookies?.token;
-  console.log("Token inside the verifyToken middleware", token);
+
+  // console.log("Token inside the verifyToken middleware", token);
 
   if (!token) {
     return res.status(401).send({ message: "Unauthorized Access !" });
@@ -39,8 +41,6 @@ const verifyToken = (req, res, next) => {
     req.user = decoded;
     next();
   });
-
-  next();
 };
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@nabenducluster.rpwkxww.mongodb.net/?retryWrites=true&w=majority&appName=NabenduCluster`;
@@ -86,14 +86,14 @@ async function run() {
     });
 
     // Save a tutorsData in DB
-    app.post("/add-tutorial", verifyToken, async (req, res) => {
+    app.post("/add-tutorial", async (req, res) => {
       const tutorData = req.body;
       console.log(tutorData);
       const result = await tutorsCollection.insertOne(tutorData);
       res.send(result);
     });
 
-    app.get("/my-tutorials/:email", verifyToken, async (req, res) => {
+    app.get("/my-tutorials/:email", async (req, res) => {
       const userEmail = req.params.email;
       const query = { email: userEmail };
 
@@ -124,7 +124,7 @@ async function run() {
     });
 
     //  get a single tutor from tutors collection
-    app.get("/tutor-detail/:id", verifyToken, async (req, res) => {
+    app.get("/tutor-detail/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await tutorsCollection.findOne(query);
@@ -140,14 +140,14 @@ async function run() {
     });
 
     // get all booked posted by a specific user from db
-    app.get("/booked-tutorial/:email", verifyToken, async (req, res) => {
+    app.get("/booked-tutorial/:email", async (req, res) => {
       const email = req.params.email;
       const query = { user_email: email };
       const result = await bookCollection.find(query).toArray();
       res.send(result);
     });
 
-    app.patch("/update-review/:tutorId", verifyToken, async (req, res) => {
+    app.patch("/update-review/:tutorId", async (req, res) => {
       const tutorId = req.params.tutorId;
       console.log(tutorId);
       const query = { _id: new ObjectId(tutorId) };
