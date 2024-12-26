@@ -93,8 +93,8 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/my-tutorials/:userEmail", verifyToken, async (req, res) => {
-      const userEmail = req.params.userEmail;
+    app.get("/my-tutorials/:email", verifyToken, async (req, res) => {
+      const userEmail = req.params.email;
       const query = { email: userEmail };
 
       const result = await tutorsCollection.find(query).toArray();
