@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const { MongoClient, ServerApiVersion, Db, ObjectId } = require("mongodb");
 const cookieParser = require("cookie-parser");
-const { jwt } = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 // const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
@@ -27,7 +27,7 @@ app.use(cookieParser());
 const verifyToken = (req, res, next) => {
   const token = req.cookies?.token;
 
-  // console.log("Token inside the verifyToken middleware", token);
+  console.log("Token inside the verifyToken middleware", token);
 
   if (!token) {
     return res.status(401).send({ message: "Unauthorized Access !" });
@@ -124,7 +124,7 @@ async function run() {
     });
 
     //  get a single tutor from tutors collection
-    app.get("/tutor-detail/:id", async (req, res) => {
+    app.get("/tutor-detail/:id", verifyToken, async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await tutorsCollection.findOne(query);
@@ -140,7 +140,7 @@ async function run() {
     });
 
     // get all booked posted by a specific user from db
-    app.get("/booked-tutorial/:email", async (req, res) => {
+    app.get("/booked-tutorial/:email", verifyToken, async (req, res) => {
       const email = req.params.email;
       const query = { user_email: email };
       const result = await bookCollection.find(query).toArray();
@@ -172,7 +172,7 @@ async function run() {
     });
 
     // updated tutors collection
-    app.put("/update-tutorials/:id", verifyToken, async (req, res) => {
+    app.put("/update-tutorials/:id", async (req, res) => {
       const tutorsData = req.body;
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
