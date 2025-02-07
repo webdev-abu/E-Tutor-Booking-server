@@ -14,8 +14,8 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://tutor-booking-43ee8.web.app",
-      "https://tutor-booking-43ee8.firebaseapp.com/",
+      "https://e-tutor-booking-server.vercel.app/",
+      "https://e-tutor-booking-server-git-main-abutahirs-projects.vercel.app/",
     ],
     credentials: true,
   })
